@@ -28,7 +28,7 @@ lastShortVid.pre<ILastShortVid>("save", function (next) {
 });
 
 const LastShortVid = mongoose.model<ILastShortVid>(
-  "lastedaccount",
+  "lastshortvid",
   lastShortVid
 );
 

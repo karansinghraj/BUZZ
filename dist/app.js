@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const dbconfig_1 = require("./db/dbconfig");
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const UserRouter_1 = require("./router/UserRouter");
+const EducationRouter_1 = require("./router/EducationRouter");
 const port = 4400;
 const app = (0, express_1.default)();
 const options = {
@@ -42,7 +42,7 @@ const options = {
 const swaggerspec = (0, swagger_jsdoc_1.default)(options);
 app.use(express_1.default.json());
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerspec));
-app.use("/api/user", UserRouter_1.EducationRoute);
+app.use("/api/user", EducationRouter_1.EducationRoute);
 // Connection
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {

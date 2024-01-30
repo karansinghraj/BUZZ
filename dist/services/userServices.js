@@ -70,10 +70,10 @@ function GetEducationAccount(req) {
                 };
             }
             const Fullname = yield (0, helper_1.fullname)(user.firstName, user.lastName);
-            let recentAccount = yield DBservices.LastEdAccount.findOne({
+            let lastAccount = yield DBservices.LastEdAccount.findOne({
                 userId: userid,
             });
-            if (!recentAccount) {
+            if (!lastAccount) {
                 return {
                     status: 404,
                     msg: "No Education Account",
@@ -88,7 +88,7 @@ function GetEducationAccount(req) {
                 profileImage: null,
             };
             const EducationAcc = yield DBservices.Education.findOne({
-                _id: recentAccount.edAccountId,
+                _id: lastAccount.edAccountId,
             });
             Data.userName = EducationAcc.userName;
             Data.accountType = EducationAcc.eduactionModel;
@@ -102,7 +102,7 @@ function GetEducationAccount(req) {
                         data: null,
                     };
                 }
-                Data.profileImage = data.baseURL + data.path;
+                Data.profileImage = data.baseURL + "/" + data.path;
                 Data.accountId = data._id;
             }
             if (EducationAcc.isClient) {
@@ -114,7 +114,7 @@ function GetEducationAccount(req) {
                         data: null,
                     };
                 }
-                Data.profileImage = data.baseURL + data.path;
+                Data.profileImage = data.baseURL + "/" + data.path;
                 Data.accountId = data._id;
             }
             if (EducationAcc.isCompany) {
@@ -126,7 +126,7 @@ function GetEducationAccount(req) {
                         data: null,
                     };
                 }
-                Data.profileImage = data.companyLogoBaseURL + data.companyLogoPath;
+                Data.profileImage = data.companyLogoBaseURL + "/" + data.companyLogoPath;
                 Data.accountId = data._id;
             }
             if (EducationAcc.isFreelancer) {
@@ -140,7 +140,7 @@ function GetEducationAccount(req) {
                         data: null,
                     };
                 }
-                Data.profileImage = data.baseURL + data.path;
+                Data.profileImage = data.baseURL + "/" + data.path;
                 Data.accountId = data._id;
             }
             return {
@@ -202,20 +202,30 @@ function AddEdEmployee(req, model) {
                 _id: userid,
                 isActive: true,
             });
-            if (user === null) {
+            if (!user) {
                 return {
                     status: 404,
                     msg: "User does not exist",
                     data: null,
                 };
             }
+            const oldemployee = yield DBservices.EdEmployee.findOne({
+                userId: user._id,
+            });
+            if (oldemployee) {
+                return {
+                    status: 404,
+                    msg: "Employee account exist already",
+                    data: null,
+                };
+            }
             const Fullname = (0, helper_1.fullname)(firstName, lastName);
-            let baseUrl = " sdc";
+            let baseUrl = " sdc/";
             let path = " cds";
             const employee = yield DBservices.EdEmployee.create({
                 userId: user._id,
-                firstName: firstName,
-                lastName: lastName,
+                firstName,
+                lastName,
                 location: location,
                 jobTitle: jobTitle,
                 company: company,
@@ -256,15 +266,15 @@ function AddEdEmployee(req, model) {
                 baseURL: baseUrl,
                 path: path,
             });
-            let recentAccount = yield DBservices.LastEdAccount.findOne({
+            let lastAccount = yield DBservices.LastEdAccount.findOne({
                 userId: userid,
             });
-            if (!recentAccount) {
-                recentAccount = new DBservices.LastEdAccount();
+            if (!lastAccount) {
+                lastAccount = new DBservices.LastEdAccount();
             }
-            recentAccount.userId = userid;
-            recentAccount.edAccountId = education._id;
-            yield recentAccount.save();
+            lastAccount.userId = userid;
+            lastAccount.edAccountId = education._id;
+            yield lastAccount.save();
             return {
                 status: 200,
                 msg: "SUCCESS",
@@ -329,13 +339,12 @@ function AddEdCompany(req, model) {
                 };
             }
             const checkcompany = yield DBservices.EdCompany.findOne({
-                companyName: companyName,
-                industrySector: industrySector,
+                userId: user._id,
             });
-            if (checkcompany != null) {
+            if (checkcompany) {
                 return {
-                    status: 409,
-                    msg: "Company already exist",
+                    status: 400,
+                    msg: "Company account already exist",
                     data: null,
                 };
             }
@@ -363,6 +372,15 @@ function AddEdCompany(req, model) {
                 MicrobloggingBio: microbloggingBio,
                 ShortVidUsername: shortVidUsername,
             });
+            let lastAccount = yield DBservices.LastEdAccount.findOne({
+                userId: userid,
+            });
+            if (!lastAccount) {
+                lastAccount = new DBservices.LastEdAccount();
+            }
+            lastAccount.userId = userid;
+            lastAccount.edAccountId = education._id;
+            yield lastAccount.save();
             const Addmicroblogging = yield DBservices.Microblogging.create({
                 userId: userid,
                 userName: companyName,
@@ -373,6 +391,15 @@ function AddEdCompany(req, model) {
                 microId: education._id,
                 microModel: "Education",
             });
+            let lastMicroBlogAccount = yield DBservices.LastMicroBlogAccount.findOne({
+                userId: userid,
+            });
+            if (!lastMicroBlogAccount) {
+                lastMicroBlogAccount = new DBservices.LastMicroBlogAccount();
+            }
+            lastMicroBlogAccount.userId = userid;
+            lastMicroBlogAccount.edAccountId = education._id;
+            yield lastMicroBlogAccount.save();
             const Addshortvid = yield DBservices.ShortVideo.create({
                 userId: userid,
                 fullName: companyName,
@@ -382,15 +409,15 @@ function AddEdCompany(req, model) {
                 baseURL: baseUrl,
                 path: path,
             });
-            let recentAccount = yield DBservices.LastEdAccount.findOne({
+            let lastShortVidAccount = yield DBservices.LastShortVid.findOne({
                 userId: userid,
             });
-            if (!recentAccount) {
-                recentAccount = new DBservices.LastEdAccount();
+            if (!lastShortVidAccount) {
+                lastShortVidAccount = new DBservices.LastShortVid();
             }
-            recentAccount.userId = userid;
-            recentAccount.edAccountId = education._id;
-            yield recentAccount.save();
+            lastShortVidAccount.userId = userid;
+            lastShortVidAccount.edAccountId = education._id;
+            yield lastShortVidAccount.save();
             return {
                 status: 200,
                 msg: "SUCCESS",

@@ -76,7 +76,7 @@ async function GetEducationAccount(
           data: null,
         };
       }
-      Data.profileImage = data.baseURL + data.path;
+      Data.profileImage = data.baseURL + "/" + data.path;
       Data.accountId = data._id;
     }
 
@@ -89,7 +89,7 @@ async function GetEducationAccount(
           data: null,
         };
       }
-      Data.profileImage = data.baseURL + data.path;
+      Data.profileImage = data.baseURL + "/" + data.path;
       Data.accountId = data._id;
     }
 
@@ -102,7 +102,7 @@ async function GetEducationAccount(
           data: null,
         };
       }
-      Data.profileImage = data.companyLogoBaseURL + data.companyLogoPath;
+      Data.profileImage = data.companyLogoBaseURL + "/" + data.companyLogoPath;
       Data.accountId = data._id;
     }
 
@@ -117,7 +117,7 @@ async function GetEducationAccount(
           data: null,
         };
       }
-      Data.profileImage = data.baseURL + data.path;
+      Data.profileImage = data.baseURL + "/" + data.path;
       Data.accountId = data._id;
     }
 
@@ -198,10 +198,22 @@ async function AddEdEmployee(req: Request, model: any) {
       _id: userid,
       isActive: true,
     });
-    if (user === null) {
+    if (!user) {
       return {
         status: 404,
         msg: "User does not exist",
+        data: null,
+      };
+    }
+
+    const oldemployee = await DBservices.EdEmployee.findOne({
+      userId: user._id,
+    });
+
+    if (oldemployee) {
+      return {
+        status: 404,
+        msg: "Employee account exist already",
         data: null,
       };
     }
@@ -213,8 +225,8 @@ async function AddEdEmployee(req: Request, model: any) {
 
     const employee: ISchema.IEdEmployee = await DBservices.EdEmployee.create({
       userId: user._id,
-      firstName: firstName,
-      lastName: lastName,
+      firstName,
+      lastName,
       location: location,
       jobTitle: jobTitle,
       company: company,
@@ -352,13 +364,12 @@ async function AddEdCompany(req: Request, model: any) {
     }
 
     const checkcompany = await DBservices.EdCompany.findOne({
-      companyName: companyName,
-      industrySector: industrySector,
+      userId: user._id,
     });
     if (checkcompany) {
       return {
         status: 400,
-        msg: "Company already exist",
+        msg: "Company account already exist",
         data: null,
       };
     }
@@ -419,7 +430,7 @@ async function AddEdCompany(req: Request, model: any) {
       });
 
     if (!lastMicroBlogAccount) {
-      lastMicroBlogAccount = new DBservices.LastEdAccount();
+      lastMicroBlogAccount = new DBservices.LastMicroBlogAccount();
     }
     lastMicroBlogAccount.userId = userid;
     lastMicroBlogAccount.edAccountId = education._id;

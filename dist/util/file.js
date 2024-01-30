@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddEdCompany = exports.GetEducationAccount = exports.AddEdEmployee = exports.loginUser = exports.GetAccountDetail = exports.AddCompany = exports.AddEmployee = exports.LastEdAccount = exports.ShortVideo = exports.Microblogging = exports.Education = exports.User = exports.EdEmployee = exports.EdClient = exports.EdCompany = exports.EdFreelancer = void 0;
+exports.AddEdCompany = exports.GetEducationAccount = exports.AddEdEmployee = exports.loginUser = exports.GetAccountDetail = exports.AddCompany = exports.AddEmployee = exports.LastShortVid = exports.LastMicroBlogAccount = exports.LastEdAccount = exports.ShortVideo = exports.Microblogging = exports.Education = exports.User = exports.EdEmployee = exports.EdClient = exports.EdCompany = exports.EdFreelancer = void 0;
 const EdFreelancer_1 = require("../schema/EdFreelancer");
 Object.defineProperty(exports, "EdFreelancer", { enumerable: true, get: function () { return EdFreelancer_1.EdFreelancer; } });
 const EdCompany_1 = require("../schema/EdCompany");
@@ -29,6 +29,10 @@ const shortVidusername_1 = require("../schema/shortVidusername");
 Object.defineProperty(exports, "ShortVideo", { enumerable: true, get: function () { return shortVidusername_1.ShortVideo; } });
 const LastEdaccount_1 = require("../schema/LastEdaccount");
 Object.defineProperty(exports, "LastEdAccount", { enumerable: true, get: function () { return LastEdaccount_1.LastEdAccount; } });
+const LastMicroBlog_1 = require("../schema/LastMicroBlog");
+Object.defineProperty(exports, "LastMicroBlogAccount", { enumerable: true, get: function () { return LastMicroBlog_1.LastMicroBlogAccount; } });
+const LastShortVid_1 = require("../schema/LastShortVid");
+Object.defineProperty(exports, "LastShortVid", { enumerable: true, get: function () { return LastShortVid_1.LastShortVid; } });
 // const uuidv4 = require("uuid").v4;
 // import jwt from "jsonwebtoken";
 // import { Request, Response } from "express";

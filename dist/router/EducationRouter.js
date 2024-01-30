@@ -1,15 +1,39 @@
-import { Router } from "express";
-import * as controller from "../util/File";
-
-const EducationRoute = Router();
-
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EducationRoute = void 0;
+const express_1 = require("express");
+const controller = __importStar(require("../util/File"));
+const EducationRoute = (0, express_1.Router)();
+exports.EducationRoute = EducationRoute;
 /**
  * @swagger
  * tags:
  *   name: Education Section
  *
  */
-
 /**
  * @swagger
  *
@@ -116,9 +140,7 @@ const EducationRoute = Router();
  *          type: string
  *
  */
-
 EducationRoute.get("/education/detail", controller.GetAccountDetail);
-
 /**
  * @swagger
  * /Api/user/education/employee:
@@ -185,7 +207,6 @@ EducationRoute.get("/education/detail", controller.GetAccountDetail);
  *
  */
 EducationRoute.post("/education/employee", controller.AddEmployee);
-
 /**
  * @swagger
  * /Api/user/education/company:
@@ -259,9 +280,7 @@ EducationRoute.post("/education/employee", controller.AddEmployee);
  *          type: string
  *
  */
-
 EducationRoute.post("/education/company", controller.AddCompany);
-
 /**
  *
  * @swagger
@@ -303,7 +322,4 @@ EducationRoute.post("/education/company", controller.AddCompany);
  *          description: Unauthorized
  *
  */
-
 EducationRoute.post("/login", controller.loginUser);
-
-export { EducationRoute };

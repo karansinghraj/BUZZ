@@ -28,7 +28,7 @@ lastMicroBlogAccount.pre<ILastMicroblog>("save", function (next) {
 });
 
 const LastMicroBlogAccount = mongoose.model<ILastMicroblog>(
-  "lastedaccount",
+  "lastmicroblog",
   lastMicroBlogAccount
 );
 

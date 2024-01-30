@@ -38,35 +38,42 @@ const EducationRoute = Router();
  *           schema:
  *            type: object
  *            properties:
- *               status:
- *                type: number
- *                example: 200
- *               msg:
- *                type: string
- *                example: "success"
- *               data:
- *                schema:
- *                 type: object
- *                 example:
- *                 properties:
- *                  username:
- *                   type: string
- *                   example: "John Doe"
- *                  jobTitle:
- *                   type: string
- *                   example: "Software Engineer"
- *                  company:
- *                   type: string
- *                   example: "Tech"
- *                  industry:
- *                   type: string
- *                   example: "IT"
- *                  skills:
- *                   type: string
- *                   example: "java ,python"
- *                  about:
- *                   type: string
- *                   example: "new opporunities"
+ *                status:
+ *                 type: number
+ *                 example: 200
+ *                msg:
+ *                 type: string
+ *                 example: "success"
+ *                data:
+ *                  type: object
+ *                  properties:
+ *                   username:
+ *                    type: string
+ *                    example: "John Doe"
+ *                   jobTitle:
+ *                    type: string
+ *                    example: "Software Engineer"
+ *                   company:
+ *                    type: string
+ *                    example: "Tech"
+ *                   industry:
+ *                    type: string
+ *                    example: "IT"
+ *                   skills:
+ *                    type: string
+ *                    example: "javapython"
+ *                   about:
+ *                    type: string
+ *                    example: "new opporunities"
+ *                   example:
+ *                    username: "John Doe"
+ *                    jobTitle: "Software Engineer"
+ *                    company: "Tech"
+ *                    industry: "IT"
+ *                    skills: "java ,python"
+ *                    about: "new opporunities"
+ *
+ *
  *
  *       401:
  *         description: Unauthorized Request

@@ -18,6 +18,8 @@ import {
 import { Microblogging } from "../schema/microbloggingBio";
 import { ShortVideo } from "../schema/shortVidusername";
 import { LastEdAccount } from "../schema/LastEdaccount";
+import { LastMicroBlogAccount } from "../schema/LastMicroBlog";
+import { LastShortVid } from "../schema/LastShortVid";
 
 export {
   EdFreelancer,
@@ -30,6 +32,8 @@ export {
   IEducation,
   ShortVideo,
   LastEdAccount,
+  LastMicroBlogAccount,
+  LastShortVid,
   AddEmployee,
   AddCompany,
   GetAccountDetail,

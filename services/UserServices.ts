@@ -355,9 +355,9 @@ async function AddEdCompany(req: Request, model: any) {
       companyName: companyName,
       industrySector: industrySector,
     });
-    if (checkcompany != null) {
+    if (checkcompany) {
       return {
-        status: 409,
+        status: 400,
         msg: "Company already exist",
         data: null,
       };
@@ -390,6 +390,17 @@ async function AddEdCompany(req: Request, model: any) {
       ShortVidUsername: shortVidUsername,
     });
 
+    let lastAccount: any = await DBservices.LastEdAccount.findOne({
+      userId: userid,
+    });
+
+    if (!lastAccount) {
+      lastAccount = new DBservices.LastEdAccount();
+    }
+    lastAccount.userId = userid;
+    lastAccount.edAccountId = education._id;
+    await lastAccount.save();
+
     const Addmicroblogging: ISchema.IMicroblogging =
       await DBservices.Microblogging.create({
         userId: userid,
@@ -401,6 +412,18 @@ async function AddEdCompany(req: Request, model: any) {
         microId: education._id,
         microModel: "Education",
       });
+
+    let lastMicroBlogAccount: any =
+      await DBservices.LastMicroBlogAccount.findOne({
+        userId: userid,
+      });
+
+    if (!lastMicroBlogAccount) {
+      lastMicroBlogAccount = new DBservices.LastEdAccount();
+    }
+    lastMicroBlogAccount.userId = userid;
+    lastMicroBlogAccount.edAccountId = education._id;
+    await lastMicroBlogAccount.save();
 
     const Addshortvid: ISchema.IShortVideo = await DBservices.ShortVideo.create(
       {
@@ -414,16 +437,16 @@ async function AddEdCompany(req: Request, model: any) {
       }
     );
 
-    let lastAccount: any = await DBservices.LastEdAccount.findOne({
+    let lastShortVidAccount: any = await DBservices.LastShortVid.findOne({
       userId: userid,
     });
 
-    if (!lastAccount) {
-      lastAccount = new DBservices.LastEdAccount();
+    if (!lastShortVidAccount) {
+      lastShortVidAccount = new DBservices.LastShortVid();
     }
-    lastAccount.userId = userid;
-    lastAccount.edAccountId = education._id;
-    await lastAccount.save();
+    lastShortVidAccount.userId = userid;
+    lastShortVidAccount.edAccountId = education._id;
+    await lastShortVidAccount.save();
 
     return {
       status: 200,

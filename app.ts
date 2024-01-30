@@ -2,7 +2,7 @@ import express from "express";
 import { db } from "./db/dbconfig";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { EducationRoute } from "./router/UserRouter";
+import { EducationRoute } from "./router/EducationRouter";
 
 const port = 4400;
 const app = express();

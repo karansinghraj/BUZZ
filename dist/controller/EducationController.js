@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddCompany = exports.AddEmployee = exports.GetAccountDetail = void 0;
+exports.GetAllClient = exports.AddCompany = exports.AddEmployee = exports.GetAccountDetail = void 0;
 const services = __importStar(require("../util/File"));
 function GetAccountDetail(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -57,3 +57,11 @@ function AddCompany(req, res) {
     });
 }
 exports.AddCompany = AddCompany;
+function GetAllClient(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const model = req.body;
+        const response = yield services.GetEducationClientprofile(req, model);
+        res.json(response);
+    });
+}
+exports.GetAllClient = GetAllClient;

@@ -55,7 +55,7 @@ function UserLogin(model) {
                 };
             }
             const token = yield JWT.sign({ sub: user._id }, SecretKey, {
-                expiresIn: "6000s",
+                expiresIn: "60000s",
             });
             return {
                 status: 200,

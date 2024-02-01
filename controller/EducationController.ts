@@ -17,4 +17,11 @@ async function AddCompany(req: Request, res: Response) {
   const response = await services.AddEdCompany(req, model);
   res.json(response);
 }
-export { GetAccountDetail, AddEmployee, AddCompany };
+
+async function GetAllClient(req: Request, res: Response) {
+  const model = req.body;
+  const response = await services.GetEducationClientprofile(req, model);
+  res.json(response);
+}
+
+export { GetAccountDetail, AddEmployee, AddCompany, GetAllClient };

@@ -319,18 +319,127 @@ EducationRoute.post("/education/company", controller.AddCompany);
  *          content:
  *            application/json:
  *              schema:
- *              type: object
- *              properties:
- *               status:
- *                type: number
- *               message:
- *                type: string
- *               token:
- *                type: string
- *                description: Authentication token
+ *               type: object
+ *               properties:
+ *                status:
+ *                 type: number
+ *                 example: 200
+ *                message:
+ *                 type: string
+ *                 example: "Login Successfully"
+ *                token:
+ *                 type: string
+ *                 example: "vsgdhxbd.bgsbddxb.gegddgd"
+ *                 description: "Authentication token"
+ *
  *
  *        '401':
  *          description: Unauthorized
  *
  */
 EducationRoute.post("/login", controller.loginUser);
+/**
+ * @swagger
+ * /Api/user/education/allclient:
+ *   get:
+ *     summary: Get Education Client Profile
+ *     description: Retrieve education client profiles
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: pageIndex
+ *         in: query
+ *         description: Page index for pagination
+ *         required: false
+ *         type: integer
+ *         default: 0
+ *       - name: pageSize
+ *         in: query
+ *         description: Page size for pagination
+ *         required: false
+ *         type: integer
+ *         default: 4
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *            schema:
+ *             type: object
+ *             properties:
+ *              status:
+ *               type: string
+ *               example: "401"
+ *              msg:
+ *               type: string
+ *               example: "Eduaction client profile"
+ *              data:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   firstname:
+ *                     type: string
+ *                     example: "John"
+ *                   lastname:
+ *                     type: string
+ *                     example: "Doe"
+ *                   username:
+ *                     type: string
+ *                     example: "johndoe"
+ *                   location:
+ *                     type: string
+ *                     example: "City, Country"
+ *                   profileimage:
+ *                     type: string
+ *                     example: "https://example.com/images/johndoe.jpg"
+ *                   about:
+ *                     type: string
+ *                     example: "A brief description about John Doe"
+ *       "401":
+ *         description: Unauthorized request
+ *         content:
+ *           application/json:
+ *            schema:
+ *             type: object
+ *             properties:
+ *              status:
+ *               type: string
+ *               example: "401"
+ *              msg:
+ *               type: string
+ *               example: "Unauthorized request"
+ *              data:
+ *               type: null
+ *       "404":
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *            schema:
+ *             type: object
+ *             properties:
+ *              status:
+ *               type: string
+ *               example: "404"
+ *              msg:
+ *               type: string
+ *               example: "User does not exist"
+ *              data:
+ *               type: null
+ *       '500':
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "500"
+ *                 msg:
+ *                   type: string
+ *                   example: "Internal Error"
+ *                 data:
+ *                   type: null
+ */
+EducationRoute.get("/education/allclient", controller.GetAllClient);

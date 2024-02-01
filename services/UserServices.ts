@@ -6,6 +6,10 @@ import * as ISchema from "../models/Typeshema";
 
 const SecretKey = "Secret_key";
 
+function getImageUrl(baseurl: string, path: string) {
+  return baseurl + "/" + path;
+}
+
 async function GetEducationAccount(
   req: Request
 ): Promise<ISchema.Apiresponse<ISchema.Igeteducationacc>> {
@@ -474,4 +478,104 @@ async function AddEdCompany(req: Request, model: any) {
   }
 }
 
-export { GetEducationAccount, AddEdEmployee, AddEdCompany };
+async function GetEducationClientprofile(req: Request, model: any) {
+  const Authheader = req.headers["authorization"];
+  const Token = Authheader && Authheader.split(" ")[1];
+
+  if (!Token) {
+    return {
+      status: 401,
+      msg: "Unauthorized 1 Request",
+      data: null,
+    };
+  }
+
+  const {
+    pageIndex = 0,
+    pageSize = 4,
+  }: { pageIndex: number; pageSize: number } = model;
+
+  try {
+    const decode = await JWT.verify(Token, SecretKey);
+    const userId = decode.sub;
+
+    if (!decode || !decode.sub) {
+      return {
+        status: 401,
+        msg: "Unauthorized  1 request",
+        data: null,
+      };
+    }
+    const user = await DBservices.User.findOne({
+      _id: userId,
+      isActive: true,
+    });
+    if (user === null) {
+      return {
+        status: 404,
+        msg: "User does not exist",
+        data: null,
+      };
+    }
+
+    const EdClientProfile: any = await DBservices.Education.find({
+      userId: { $ne: userId },
+      isClient: true,
+      eduactionModel: "Client",
+    })
+      .populate({
+        path: "edAccountId",
+        model: "edModel",
+        select: "_id lastname firstname location baseurl path location ",
+      })
+      .sort({ createdDate: -1 }) // descending higher to lower date
+      .skip(pageIndex * pageSize)
+      .limit(pageSize)
+      .exec();
+
+    if (EdClientProfile.length === 0) {
+      return {
+        status: 404,
+        msg: "Not Found",
+        data: null,
+      };
+    }
+
+    const totalcount = await DBservices.Education.find({
+      userId: { $ne: userId },
+    });
+
+    const result = await EdClientProfile.map((profile: any) => {
+      return {
+        firstname: profile.edAccountId.firstName,
+        lastname: profile.edAccountId.lastName,
+        username: profile.userName,
+        location: profile.edAccountId.location,
+        profileimage: getImageUrl(
+          profile.edAccountId.baseURL,
+          profile.edAccountId.path
+        ),
+        about: profile.edAccountId.about,
+      };
+    });
+
+    return {
+      status: 200,
+      msg: "Eduaction client profile",
+      data: result,
+    };
+  } catch (error) {
+    return {
+      status: 500,
+      msg: "Internal Error",
+      data: null,
+    };
+  }
+}
+
+export {
+  GetEducationAccount,
+  AddEdEmployee,
+  AddEdCompany,
+  GetEducationClientprofile,
+};

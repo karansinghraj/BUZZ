@@ -52,7 +52,7 @@ async function UserLogin(model: any) {
     }
 
     const token = await JWT.sign({ sub: user._id }, SecretKey, {
-      expiresIn: "6000s",
+      expiresIn: "60000s",
     });
 
     return {

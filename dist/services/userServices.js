@@ -35,11 +35,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddEdCompany = exports.AddEdEmployee = exports.GetEducationAccount = void 0;
+exports.GetEducationClientprofile = exports.AddEdCompany = exports.AddEdEmployee = exports.GetEducationAccount = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const DBservices = __importStar(require("../util/File"));
 const helper_1 = require("../util/helper");
 const SecretKey = "Secret_key";
+function getImageUrl(baseurl, path) {
+    return baseurl + "/" + path;
+}
 function GetEducationAccount(req) {
     return __awaiter(this, void 0, void 0, function* () {
         const Authheader = req.headers["authorization"];
@@ -435,3 +438,86 @@ function AddEdCompany(req, model) {
     });
 }
 exports.AddEdCompany = AddEdCompany;
+function GetEducationClientprofile(req, model) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const Authheader = req.headers["authorization"];
+        const Token = Authheader && Authheader.split(" ")[1];
+        if (!Token) {
+            return {
+                status: 401,
+                msg: "Unauthorized 1 Request",
+                data: null,
+            };
+        }
+        const { pageIndex = 0, pageSize = 4, } = model;
+        try {
+            const decode = yield jsonwebtoken_1.default.verify(Token, SecretKey);
+            const userId = decode.sub;
+            if (!decode || !decode.sub) {
+                return {
+                    status: 401,
+                    msg: "Unauthorized  1 request",
+                    data: null,
+                };
+            }
+            const user = yield DBservices.User.findOne({
+                _id: userId,
+                isActive: true,
+            });
+            if (user === null) {
+                return {
+                    status: 404,
+                    msg: "User does not exist",
+                    data: null,
+                };
+            }
+            const EdClientProfile = yield DBservices.Education.find({
+                userId: { $ne: userId },
+                isClient: true,
+                eduactionModel: "Client",
+            })
+                .populate({
+                path: "edAccountId",
+                model: "edModel",
+                select: "_id lastname firstname location baseurl path location ",
+            })
+                .sort({ createdDate: -1 }) // descending higher to lower date
+                .skip(pageIndex * pageSize)
+                .limit(pageSize)
+                .exec();
+            if (EdClientProfile.length === 0) {
+                return {
+                    status: 404,
+                    msg: "Not Found",
+                    data: null,
+                };
+            }
+            const totalcount = yield DBservices.Education.find({
+                userId: { $ne: userId },
+            });
+            const result = yield EdClientProfile.map((profile) => {
+                return {
+                    firstname: profile.edAccountId.firstName,
+                    lastname: profile.edAccountId.lastName,
+                    username: profile.userName,
+                    location: profile.edAccountId.location,
+                    profileimage: getImageUrl(profile.edAccountId.baseURL, profile.edAccountId.path),
+                    about: profile.edAccountId.about,
+                };
+            });
+            return {
+                status: 200,
+                msg: "Eduaction client profile",
+                data: result,
+            };
+        }
+        catch (error) {
+            return {
+                status: 500,
+                msg: "Internal Error",
+                data: null,
+            };
+        }
+    });
+}
+exports.GetEducationClientprofile = GetEducationClientprofile;

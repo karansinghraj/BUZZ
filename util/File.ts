@@ -8,12 +8,14 @@ import {
   AddEmployee,
   GetAccountDetail,
   AddCompany,
+  GetAllClient,
 } from "../controller/EducationController";
 import { loginUser } from "../controller/LoginController";
 import {
   AddEdEmployee,
   GetEducationAccount,
   AddEdCompany,
+  GetEducationClientprofile,
 } from "../services/UserServices";
 import { Microblogging } from "../schema/microbloggingBio";
 import { ShortVideo } from "../schema/shortVidusername";
@@ -41,6 +43,8 @@ export {
   AddEdEmployee,
   GetEducationAccount,
   AddEdCompany,
+  GetEducationClientprofile,
+  GetAllClient,
 };
 
 // const uuidv4 = require("uuid").v4;
